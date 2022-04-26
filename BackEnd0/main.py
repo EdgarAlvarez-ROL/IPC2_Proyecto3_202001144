@@ -30,6 +30,10 @@ def recibexml():
     return '{"data":"XML Cargado"}'
 
 
+@app.route('/obtenerEntrada')
+def obtener_enntrada():
+    return gestor.obtener_entrada()
+
 
 
 

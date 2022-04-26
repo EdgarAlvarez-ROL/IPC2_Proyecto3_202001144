@@ -83,7 +83,7 @@ function cargar(){
             let cuerpo = {
                 data:evt.target.result
             }
-            console.log(JSON.stringify(cuerpo))
+            // console.log(JSON.stringify(cuerpo))
             fetch('http://localhost:5000/cargaxml', {
             method: 'POST',
             headers,
@@ -92,7 +92,7 @@ function cargar(){
             .then(response => response.json())
             .then(result => {
               console.log('Success:', result);
-              // actualizar()
+              actualizar()
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -206,99 +206,49 @@ function agregarPaciente(){
 }
 
 
-// function actualizar(){
-//   document.getElementById("cardsc").innerHTML = '';
-//   let text="";
-// text = `<table class="table" style="margin=10px">
-// <thead>
-// <tr>
-// <th scope="col">#</th>
-// <th scope="col">Nombre</th>
-// <th scope="col">Apellido</th>
-// <th scope="col">Fecha Nacimiento</th>
-// <th scope="col">Sexo</th>
-// <th scope="col">Usuario</th>
-// <th scope="col">Contraseña</th>
-// <th scope="col">Telefono</th>
-// <th scope="col">Opciones</th>
-// </tr>
-// </thead>
-// <tbody>`
+function actualizar(){
+  // document.getElementById("comentarios1").innerHTML = '';
+  let text="";
+  text = ``
 
-//   fetch('http://localhost:5000/obtenerpacientes')
-//   .then(response => response.json())
-//   .then(data =>{
-//       var i;
   
-      
-//       for(i=0;i<data.length;i++){
-//           text+= `
-//                   <tr>
-//                   <th scope="row">${i+1}</th>
-//                   <td>${data[i].nombrep}</td>
-//                   <td>${data[i].apellidop}</td>
-//                   <td>${data[i].fechap}</td>
-//                   <td>${data[i].sexop}</td>
-//                   <td>${data[i].userp}</td>
-//                   <td>${data[i].passwordp}</td>
-//                   <td>${data[i].telp}</td>
-//                   <td><button href="#" class="btn btn btn-danger" onclick="eliminar('${data[i].nombrep}','${data[i].userp}')">Eliminar</button></td>
-//                   </tr>
-//                   `
-//                   console.log(data[i].nombrep,'prueba')
-//       }
-//       text+=`</tbody>
-//               </table>`
-//       document.getElementById("cardsc").innerHTML = text;
-//   });
+  fetch('http://localhost:5000/obtenerEntrada')
+  .then(response => response.json())
+  .then(data =>{
+    var i;
+    
+    text+= `${data}`
+    
+    
+    document.getElementById("comentarios1").innerHTML = text;
+    console.log('actualizar')
+    // console.log('ObtenerEntrada Data:',data)
+
+    // alert('Recargue la Pagina porfavor')
+});
 
 
-// }
+}
 
 
 
 
 // Carga de Pacientes 2.0
 
-// let text2=""
-// text2 = `<table class="table" style="margin=10px">
-// <thead>
-// <tr>
-// <th scope="col">#</th>
-// <th scope="col">Nombre</th>
-// <th scope="col">Apellido</th>
-// <th scope="col">Fecha Nacimiento</th>
-// <th scope="col">Sexo</th>
-// <th scope="col">Usuario</th>
-// <th scope="col">Contraseña</th>
-// <th scope="col">Telefono</th>
-// <th scope="col">Opciones</th>
-// </tr>
-// </thead>
-// <tbody>`
+let text2=""
+text2 = ``
 
-// fetch('http://localhost:5000/obtenerpacientes')
-// .then(response => response.json())
-// .then(data =>{
-//     var i;
-
+fetch('http://localhost:5000/obtenerEntrada')
+.then(response => response.json())
+.then(data =>{
+    var i;
     
-//     for(i=0;i<data.length;i++){
-//         text2+= `
-//                 <tr>
-//                 <th scope="row">${i+1}</th>
-//                 <td>${data[i].nombrep}</td>
-//                 <td>${data[i].apellidop}</td>
-//                 <td>${data[i].fechap}</td>
-//                 <td>${data[i].sexop}</td>
-//                 <td>${data[i].userp}</td>
-//                 <td>${data[i].passwordp}</td>
-//                 <td>${data[i].telp}</td>
-//                 <td><button href="#" class="btn btn btn-danger" onclick="eliminar('${data[i].nombrep}','${data[i].userp}')">Eliminar</button></td>
-//                 </tr>
-//                 `
-//     }
-//     text2+=`</tbody>
-//             </table>`
-//     document.getElementById("tablapacientes").innerHTML = text2;
-// });
+    text2+= `${data}`
+    
+    
+    document.getElementById("comentarios1").innerHTML = text2;
+    // console.log('ObtenerEntrada Data:',data)
+    console.log('let')
+
+    // alert('Recargue la Pagina porfavor')
+});

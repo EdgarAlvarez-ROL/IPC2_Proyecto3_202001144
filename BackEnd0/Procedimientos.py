@@ -1,23 +1,23 @@
 import os
 
 def hacerXML_carga(text):
-    print ("\nCrear un archivo")
+    print ("\nCreando un archivo XMLCOPY")
     print ("================")
 
-    file = 'BackEnd0\\xmlDB.xml'
+    file = 'BackEnd0\\xmlCopyEntrada.xml'
 
     archivo = open(file, 'w') # abre el archivo datos.txt
     archivo.write(text)
     # print(archivo.readline())
     archivo.close()
 
-def leerXML(file):
-    print ("\Leer un archivo")
-    print ("================")
 
-    file = 'BackEnd0\\xmlDB.xml'
+    # print ("\nCreando un archivo TEXTCOPY")
+    # print ("================")
 
-    archivo = open(file, 'w') # abre el archivo datos.txt
+    # file = 'BackEnd0\\xmlDB.txt'
+
+    # archivo = open(file, 'w') # abre el archivo datos.txt
     # archivo.write(text)
-    print(archivo)
-    archivo.close()
+    # # print(archivo.readline())
+    # archivo.close()

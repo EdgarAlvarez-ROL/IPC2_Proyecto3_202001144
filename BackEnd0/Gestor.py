@@ -22,6 +22,10 @@ class Gestor:
     def obtenerDataXML(self):
         return self.text
 
+    def obtener_entrada(self):
+        return  json.dumps(self.text)
+
+
     # def obtener_usuarios(self):
     #     return json.dumps([ob.__dict__ for ob in self.usuarios])
 
