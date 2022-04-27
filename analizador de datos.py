@@ -1,6 +1,14 @@
+from contextlib import ContextDecorator
+from distutils.archive_util import make_archive
+from posixpath import split
 from xml.dom import minidom
 import re
+import sys 
+import numpy as np 
 
+""" A VER SI NO DA PROBLEMAS"""
+import xml.etree.cElementTree as ET
+""""""
 
 ruta = 'entrada.xml'
 
@@ -10,14 +18,15 @@ mydoc = minidom.parse(ruta)            # Creamos un objeto del documento
 palabrasPositivas = ''
 palabrasNegativas = ''
 empresas_y_servicios = ''
+lista_de_mensajes = ''
+listado_fechas = ''
 
 def lectorXML(rutanueva):
-    global palabrasPositivas, palabrasNegativas, empresas_y_servicios
+    global palabrasPositivas, palabrasNegativas, empresas_y_servicios, lista_de_mensajes
 
     mydoc = minidom.parse(rutanueva)    
 
     """ SENTIMIENTOS """
-    ##########################################################################################################
     """"""        
     sentimientos_positivos = mydoc.getElementsByTagName('sentimientos_positivos')      
     for x in sentimientos_positivos:
@@ -26,8 +35,9 @@ def lectorXML(rutanueva):
             # print(palabra)
             palabrasPositivas += str.strip(palabra) + ' '            
     listaPPositivas = (str.rstrip(palabrasPositivas)).split(' ')
-    for x in listaPPositivas:
-        print(x)
+    palabrasPositivas = listaPPositivas
+    # for x in palabrasPositivas:
+    #     print(x)
     """"""
     ##########################################################################################################
     """"""        
@@ -38,11 +48,12 @@ def lectorXML(rutanueva):
             # print(palabra)
             palabrasNegativas += str.strip(palabra) + ' '            
     listaPNegativas = (str.rstrip(palabrasNegativas)).split(' ')
-    for x in listaPNegativas:
-        print(x)
+    palabrasNegativas = listaPNegativas
+    # for x in palabrasNegativas:
+    #     print(x)
     """"""
     """"""
-    """"""
+    """ EMPRESAS Y SUS SERVICIOS """
     """"""
     empresas = mydoc.getElementsByTagName('empresa')      
     for x in empresas:
@@ -71,8 +82,122 @@ def lectorXML(rutanueva):
                     
 
     listaEmpresas = (str.rstrip(empresas_y_servicios)).split(' ')
-    for x in listaEmpresas:
-        print(x)
+    empresas_y_servicios = listaEmpresas
+    # for x in empresas_y_servicios:
+    #     print(x)
+    """"""
+    """"""
+    ##########################################################################################################
+    """ MENSAJES """
+    """"""
+    lista_mensajes = mydoc.getElementsByTagName('lista_mensajes')      
+    for c in lista_mensajes:
+        for mensajesx in c.getElementsByTagName('mensaje'):
+            mensaje = mensajesx.childNodes[0].data
+            # print(mensaje)
+            lista_de_mensajes += mensaje + '$$44$$'
+    listaMensaje = lista_de_mensajes.split('$$44$$')
+    lista_de_mensajes = listaMensaje
+    lista_de_mensajes.pop()
+    # for x in lista_de_mensajes:
+        # print('******'+ x)
+    """"""
+    """"""
+    analizar_fehcas_en_mensaje()
+
+
+def analizar_fehcas_en_mensaje():
+    global lista_de_mensajes, listado_fechas
+    # lista = ['Ricky', 'Alvaro', 'David', 'Edgardo', 'Jacinto', 'Jose', 'Ricky', 'Jose', 'Jose', 'Gerardo']
+    # lista.pop()
+    """ INGRESANDO FECHAS A LISTA """
+    """"""
+    # print(len(lista_de_mensajes))
+    # lista_de_mensajes.pop()
+    # print(len(lista_de_mensajes))
+    for x in lista_de_mensajes:
+        match = re.search(r'(\d+/\d+/\d+)',x)
+        listado_fechas += match.group(1) + ' '
+        # print(match.group(1))
+    cuas = (str.rstrip(listado_fechas)).split(' ')
+    listado_fechas = cuas
+    """ sacando solo las fechas que no se repiten """
+    copy_listad_fechas = listado_fechas
+    # print("Original List is: ",listado_fechas)
+    convert_list_to_set = set(copy_listad_fechas)
+    # print("Set is: ",convert_list_to_set)
+    new_list = list(convert_list_to_set)
+    # print("Resultant List is: ",new_list)
+    copy_listad_fechas = list(convert_list_to_set)
+    # print("Removed duplicates from original list: ",listado_fechas)
+    # print(copy_listad_fechas)
+    """"""   
+    ##########################################################################################################
+    """"""
+    """ DETECTANDO FECHAS EN MENSAJES """
+    """"""
+    fechas_pal_xml = ''
+    for x in copy_listad_fechas:
+        # print(listado_fechas.count(x))
+        fechas_pal_xml += x + ',' + str(listado_fechas.count(x)) + ' '
+    
+    # print(fechas_pal_xml)
+    fechas_pal_xml_espacio = (str.rstrip(fechas_pal_xml)).split(' ')
+    fechas_temp = ''
+    for x in fechas_pal_xml_espacio:
+        fechas_temp+= x + ','
+        # print(x)
+        
+    fechas_pal_xml_coma = fechas_temp.split(',')
+    fechas_pal_xml_coma.pop()
+    # print(fechas_pal_xml_coma) #Con las fechas y su numero de mensajes
+    """"""
+    ##########################################################################################################
+    """"""
+    """"""
     """"""
 
+    numeroFechas = len(copy_listad_fechas)
+    analizar_sentimientos_en_mensajes()
+    cua(fechas_pal_xml_coma, numeroFechas)
+    
+
+    
+def analizar_sentimientos_en_mensajes():
+    global palabrasPositivas, palabrasNegativas, empresas_y_servicios, lista_de_mensajes 
+
+    listado_pos_number = ''
+    contador = 0
+    for x in range(len(palabrasPositivas)):
+        for mess in lista_de_mensajes:
+            print(mess.count(palabrasPositivas[x]))
+        print('')
+        
+        
+
+
+                    
+
+def cua(fechas_pal_xml_coma, numeroFechas)           :
+    lista_respuestas = ET.Element("lista_respuestas")
+    respuesta = ET.SubElement(lista_respuestas, "respuesta")
+
+    contador = 0
+    contMes = 1
+    for x in range(numeroFechas):
+        fecha = ET.SubElement(respuesta, "fecha").text = fechas_pal_xml_coma[contador]
+        mensajes = ET.SubElement(respuesta, "mensajes")
+        ET.SubElement(mensajes, "total").text = fechas_pal_xml_coma[contMes]
+        ET.SubElement(mensajes, "positivos").text = "positivos"
+        ET.SubElement(mensajes, "negativos").text = "negativos"
+        ET.SubElement(mensajes, "neutros").text = "neutros"
+        contador += 2
+        contMes += 2
+
+    arbol = ET.ElementTree(lista_respuestas)
+    arbol.write("prueba.xml")
+
+
+
 lectorXML(ruta)
+# cua()
