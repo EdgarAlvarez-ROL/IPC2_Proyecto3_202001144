@@ -1,15 +1,15 @@
 <solicitud_clasificacion>
 <diccionario>
     <sentimientos_positivos>
-        <palabra> bueno </palabra>
-        <palabra> excelente </palabra>
+        <palabra> Buenó </palabra>
+        <palabra> eXcelénte </palabra>
         <palabra> cool </palabra>
         <palabra> satisfecho </palabra>
-        <palabra> alegre </palabra>
+        <palabra> alégre </palabra>
     </sentimientos_positivos>
     <sentimientos_negativos>
         <palabra> malo </palabra>
-        <palabra> pésimo </palabra>
+        <palabra> PésimO </palabra>
         <palabra> triste </palabra>
         <palabra> molesto </palabra>
         <palabra> decepcionado </palabra>
@@ -29,7 +29,7 @@
                 </servicio>
                 <servicio nombre="graduación">
                 <alias>graduarme</alias>
-                <alias>graduacion</alias>
+                <alias>graduación</alias>
                 </servicio>
 
         </empresa>
@@ -51,15 +51,10 @@
 </diccionario>
 <lista_mensajes>
     <mensaje> Lugar y fecha: Guatemala, 01/04/2022 15:01 Usuario: map0001@usac.edu Red social: Twitter El servicio en la USAC para inscripción fue muy bueno y me siento muy satisfecho. </mensaje>
-    <mensaje> Lugar y fecha: Guatemala, 01/04/2022 15:20 Usuario: map0002@usac.edu Red social: Facebook Hoy me inscribí en la USAC, no encontré parqueo e inicié molesto mi gestión, luego tuve que hacer cola y me indicaron que era la cola incorrecta, esto me enojó mucho y mejor me fui. </mensaje>
+    <mensaje> Lugar y fecha: Guatemala, 02/07/2001 15:20 Usuario: map0002@usac.edu Red social: Facebook Hoy me inscribí en la USAC, fue muy bueno y estuvo cool, no encontré parqueo e inicié molesto mi gestión, luego tuve que hacer cola y me indicaron que era la cola incorrecta, esto me enojó mucho y mejor me fui, aunque luego me asigne a mis cursos. </mensaje>
     <mensaje> Lugar y fecha: Guatemala, 01/04/2022 15:43 Usuario: map0003@usac.edu Red social: WhatsApp Ya estoy inscrito en la USAC, el proceso fue muy bueno, pero al salir, mi carro tenía pinchadas las llantas, esto me preocupó y me fui decepcionado. </mensaje>
 
     <mensaje> Lugar y fecha: Guatemala, 01/04/2022 15:43 Usuario: map0003@usac.edu Red social: WhatsApp Ya me asigne a mis cursos de la USAC, el proceso fue pésimo. </mensaje>
     <mensaje> Lugar y fecha: Guatemala, 01/04/2022 15:43 Usuario: map0003@usac.edu Red social: WhatsApp Hoy a la USAC, para tramitar mis papeles de graduacion estube poco tiempo en la cole pero estoy alegre porque ya me voy a graduar. </mensaje>
-    <mensaje/>
-    <mensaje/>
-    <mensaje/>
-    <mensaje/>
-    <mensaje/>
 </lista_mensajes>
 </solicitud_clasificacion>
