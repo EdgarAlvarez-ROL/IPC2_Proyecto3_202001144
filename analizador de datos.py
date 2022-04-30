@@ -1,3 +1,5 @@
+from __future__ import print_function
+from ast import NameConstant
 from contextlib import ContextDecorator
 from distutils.archive_util import make_archive
 import math
@@ -32,7 +34,7 @@ listEmpresas = ''
 
 
 def lectorXML(rutanueva):
-    global palabrasPositivas, palabrasNegativas, empresas_y_servicios, lista_de_mensajes, palabrasNeutras
+    global palabrasPositivas, palabrasNegativas, empresas_y_servicios, lista_de_mensajes, palabrasNeutras, listEmpresas
 
     mydoc = minidom.parse(rutanueva)    
 
@@ -85,6 +87,7 @@ def lectorXML(rutanueva):
             nombreEmpresa = str.strip(cua.childNodes[0].data)
             # print(nombreEmpresa)
             empresas_y_servicios += (nombreEmpresa.lower()) + ' '
+            listEmpresas += (nombreEmpresa.lower()) + ' '
 
 
             servicios = x.getElementsByTagName('servicio')
@@ -113,6 +116,9 @@ def lectorXML(rutanueva):
 
     listaEmpresas = (str.rstrip(empresas_y_servicios)).split(' ')
     empresas_y_servicios = listaEmpresas
+
+    tempEmpre = (str.rstrip(listEmpresas)).split(' ')
+    listEmpresas = tempEmpre
 
     listNeutras = (str.rstrip(palabrasNeutras)).split(' ')
     palabrasNeutras = listNeutras
@@ -203,7 +209,7 @@ def analizar_fehcas_en_mensaje():
     cua(fechas_pal_xml_coma, numeroFechas)
     
 
-
+""" DEF FECHAS"""
 def p_fech(fecha):
     global palabrasPositivas, lista_de_mensajes
     contador = 0
@@ -215,7 +221,7 @@ def p_fech(fecha):
             # print(n_palab)
             # print(fecha)
 
-            if fechaita == fecha and n_palab == 1:
+            if fechaita == fecha and n_palab >= 1:
                 contador += 1
         # print('')   
 
@@ -254,9 +260,77 @@ def neu_fech(fecha):
         # print('')   
 
     return contador
+""""""
+""" DEF ANALISIS """
+def ns_empre(empresa):
+    global lista_de_mensajes, listEmpresas
+    contador = 0
+    
+    for mess in lista_de_mensajes:
+        n_palab = mess.count((empresa))
+        # print(n_palab)
+        # print(fecha)
 
+        if  n_palab >= 1:
+            contador += 1
+        # print('')   
+    # print('')
+    return contador
 
-def cua(fechas_pal_xml_coma, numeroFechas)           :
+def p_empre(empresa):
+    global palabrasPositivas, lista_de_mensajes
+    contador = 0
+    for x in range(len(palabrasPositivas)):
+        for mess in lista_de_mensajes:
+            # print(empresa)
+            
+            n_palab = mess.count(palabrasPositivas[x])
+            # print(n_palab)
+            # print(empresa in mess)
+
+            if ((empresa in mess) == True) and n_palab >= 1:
+                contador += 1
+        # print('')   
+
+    return contador
+
+def n_empre(empresa):
+    global palabrasNegativas, lista_de_mensajes
+    contador = 0
+    for x in range(len(palabrasNegativas)):
+        for mess in lista_de_mensajes:
+            # print(empresa)
+            
+            n_palab = mess.count(palabrasNegativas[x])
+            # print(n_palab)
+            # print(empresa in mess)
+
+            if ((empresa in mess) == True) and n_palab >= 1:
+                contador += 1
+        # print('')   
+
+    return contador
+
+def neu_empre(empresa):
+    global palabrasNeutras, lista_de_mensajes
+    contador = 0
+    for x in range(len(palabrasNeutras)):
+        for mess in lista_de_mensajes:
+            # print(empresa)
+            
+            n_palab = mess.count(palabrasNeutras[x])
+            # print(n_palab)
+            # print(empresa in mess)
+
+            if ((empresa in mess) == True) and n_palab >= 1:
+                contador += 1
+        # print('')   
+
+    return contador
+
+""""""
+def cua(fechas_pal_xml_coma, numeroFechas):  
+    global listEmpresas         
     lista_respuestas = ET.Element("lista_respuestas")
     respuesta = ET.SubElement(lista_respuestas, "respuesta")
 
@@ -268,7 +342,6 @@ def cua(fechas_pal_xml_coma, numeroFechas)           :
         ET.SubElement(mensajes, "total").text = fechas_pal_xml_coma[contMes]
 
         np = p_fech(fechas_pal_xml_coma[contador])
-        # print(np)
         ET.SubElement(mensajes, "positivos").text = str(np)
 
         nn = n_fech(fechas_pal_xml_coma[contador])
@@ -278,6 +351,31 @@ def cua(fechas_pal_xml_coma, numeroFechas)           :
         ET.SubElement(mensajes, "neutros").text = str(nneu)
         contador += 2
         contMes += 2
+    
+    contador = 0
+    contMes = 1
+    analisis = ET.SubElement(respuesta, "analisis")
+    for x in range(len(listEmpresas)):
+        empresa = ET.SubElement(analisis, "empresa")
+        mensajes2 = ET.SubElement(empresa, "mensajes")
+
+        # print(listEmpresas[contador])
+        nMensaje = ns_empre(listEmpresas[contador]) 
+        ET.SubElement(mensajes2, "total").text = str(nMensaje)
+
+
+        np = p_empre(listEmpresas[contador])
+        ET.SubElement(mensajes2, "positivos").text = str(np)
+
+        nn = n_empre(listEmpresas[contador])
+        ET.SubElement(mensajes2, "negativos").text = str(nn)
+
+        nneu = neu_empre(listEmpresas[contador])
+        ET.SubElement(mensajes2, "neutros").text = str(nneu)
+        
+        contador += 1
+
+
 
     arbol = ET.ElementTree(lista_respuestas)
     arbol.write("prueba.xml")
