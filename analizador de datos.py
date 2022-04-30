@@ -1,5 +1,6 @@
 from __future__ import print_function
 from ast import NameConstant
+from configparser import ParsingError
 from contextlib import ContextDecorator
 from distutils.archive_util import make_archive
 import math
@@ -28,13 +29,14 @@ lista_de_mensajes = ''
 listado_fechas = ''
 
 listEmpresas = ''
+namesServicios = ''
 
 
 
 
 
 def lectorXML(rutanueva):
-    global palabrasPositivas, palabrasNegativas, empresas_y_servicios, lista_de_mensajes, palabrasNeutras, listEmpresas
+    global palabrasPositivas, palabrasNegativas, empresas_y_servicios, lista_de_mensajes, palabrasNeutras, listEmpresas, namesServicios
 
     mydoc = minidom.parse(rutanueva)    
 
@@ -95,6 +97,7 @@ def lectorXML(rutanueva):
                 nameServicio = str.strip(s.getAttribute('nombre'))
                 # print(nameServicio)
                 empresas_y_servicios += (nameServicio).lower() + ' '
+                namesServicios += ((nameServicio).lower()) + ','
                    
                     
                 for aliass in s.getElementsByTagName('alias'):
@@ -124,6 +127,12 @@ def lectorXML(rutanueva):
     palabrasNeutras = listNeutras
     # print(palabrasNeutras)
 
+    # print(namesServicios)
+    namesTemp = (str.strip(namesServicios)).split(',')
+    namesServicios = namesTemp
+    namesServicios.pop()
+
+    print(namesServicios)
     # for x in empresas_y_servicios:
     #     print(x)
     """"""
@@ -356,7 +365,7 @@ def cua(fechas_pal_xml_coma, numeroFechas):
     contMes = 1
     analisis = ET.SubElement(respuesta, "analisis")
     for x in range(len(listEmpresas)):
-        empresa = ET.SubElement(analisis, "empresa")
+        empresa = ET.SubElement(analisis, "empresa", {'nombre': listEmpresas[contador]})
         mensajes2 = ET.SubElement(empresa, "mensajes")
 
         # print(listEmpresas[contador])
@@ -372,6 +381,11 @@ def cua(fechas_pal_xml_coma, numeroFechas):
 
         nneu = neu_empre(listEmpresas[contador])
         ET.SubElement(mensajes2, "neutros").text = str(nneu)
+
+
+        # servicio = ET.SubElement(empresa, "servicio", {'nombre': 'servicio'})
+        # mensajes3 = ET.SubElement(servicio, "mensajes")
+
         
         contador += 1
 
