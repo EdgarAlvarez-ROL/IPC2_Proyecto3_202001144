@@ -1,18 +1,34 @@
 import json
-import re
+import os
 # import os
 import Procedimientos
+import analizadorXML
+
 
 class Gestor:
     def __init__(self):
         self.text = ''
+        self.textSalida = ''
 
     #Create
     def recibirXML(self, data):
         self.text = data
         Procedimientos.hacerXML_carga(data)
-        print('Esta es la info del xml: '+self.text)
+        # print('Esta es la info del xml: '+self.text)
         
+
+    def analizarXML(self):
+        analizadorXML.lectorXML('BackEnd0\\xmlCopyEntrada.xml')
+        
+        file = 'BackEnd0\\request.xml'
+
+        archivo = open(file, 'r') # abre el archivo datos.txt
+        self.textSalida = archivo.readlines()
+        # print(archivo.readline())
+        archivo.close()
+        return json.dumps(self.textSalida)
+
+
 
     # def crearUsuario(self,nombre,apellido,password,user):
     #     self.usuarios.append(Usuario(nombre,apellido,password,user))
@@ -93,4 +109,7 @@ class Gestor:
 
     def cargaXML(self,data):
         self.recibirXML(data)
-            
+    
+
+
+    # analizarXML()

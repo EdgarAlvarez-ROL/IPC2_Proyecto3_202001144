@@ -35,6 +35,11 @@ def obtener_enntrada():
     return gestor.obtener_entrada()
 
 
+@app.route('/obtenerDataSalida')
+def Consultar_Data():
+    return gestor.analizarXML()
+
+
 
 
 

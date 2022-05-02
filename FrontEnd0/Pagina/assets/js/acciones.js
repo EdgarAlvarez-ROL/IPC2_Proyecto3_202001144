@@ -106,6 +106,17 @@ function cargar(){
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
 function modificarPaciente(){
   let nombrep_o = document.getElementById("vnombrep");
   let nombrep = document.getElementById("mnombrep");
@@ -232,7 +243,6 @@ function actualizar(){
 
 
 
-
 // Carga de Pacientes 2.0
 
 let text2=""
@@ -252,3 +262,33 @@ fetch('http://localhost:5000/obtenerEntrada')
 
     // alert('Recargue la Pagina porfavor')
 });
+
+
+
+
+
+
+// CONSULTAR DATA
+function consultarData(){
+  // document.getElementById("comentarios1").innerHTML = '';
+  let textSalida="";
+  textSalida = ``
+
+  
+  fetch('http://localhost:5000/obtenerDataSalida')
+  .then(response => response.json())
+  .then(data =>{
+    var i;
+    
+    textSalida+= `${data}`
+    
+    
+    document.getElementById("comentarios2").innerHTML = textSalida;
+    console.log('actualizar SALIDA')
+    // console.log('ObtenerEntrada Data:',data)
+
+    // alert('Recargue la Pagina porfavor')
+});
+
+
+}

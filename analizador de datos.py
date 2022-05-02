@@ -104,7 +104,7 @@ def lectorXML(rutanueva):
                 
                 empresas_y_servicios += (nameServicio).lower() + ' '
                 namesServicios += ((nameServicio).lower()) + ','
-                   
+                # print(nameServicio)
                     
                 for aliass in s.getElementsByTagName('alias'):
                     dAlias = str.strip(aliass.childNodes[0].data)
@@ -119,7 +119,7 @@ def lectorXML(rutanueva):
                     ####################################################
                     palabrasNeutras += (str.strip(dAlias)).lower() + ' '
                     ####################################################
-                    # print('')
+                    print(dAlias)
             empresas_y_servicios += '$6$44$6$' + " "
                     
 

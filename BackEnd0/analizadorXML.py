@@ -1,11 +1,6 @@
-from __future__ import print_function
-from ast import NameConstant
-from cgi import print_arguments
 from configparser import ParsingError
 from contextlib import ContextDecorator
-from distutils.archive_util import make_archive
 import math
-from posixpath import split
 from xml.dom import minidom
 import re
 import sys 
@@ -55,7 +50,7 @@ def lectorXML(rutanueva):
             
             # print(palabra)
             palabrasPositivas += str.strip(palabra) + ' '            
-    listaPPositivas = (str.rstrip(palabrasPositivas)).split(' ')
+    listaPPositivas = ((str.rstrip(palabrasPositivas))).split(' ')
     palabrasPositivas = listaPPositivas
     # for x in palabrasPositivas:
     #     print(x)
@@ -97,14 +92,17 @@ def lectorXML(rutanueva):
             servicios = x.getElementsByTagName('servicio')
             for s in servicios:
                 nameServicio = str.strip(s.getAttribute('nombre'))
+               
+
                 # print(nameServicio)
                 nameServicio = re.sub(r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1", normalize( "NFD", nameServicio), 0, re.I)
                     # -> NFC
                 nameServicio = normalize( 'NFC', nameServicio)
                 
+
                 empresas_y_servicios += (nameServicio).lower() + ' '
                 namesServicios += ((nameServicio).lower()) + ','
-                   
+                # print(nameServicio)
                     
                 for aliass in s.getElementsByTagName('alias'):
                     dAlias = str.strip(aliass.childNodes[0].data)
@@ -119,7 +117,7 @@ def lectorXML(rutanueva):
                     ####################################################
                     palabrasNeutras += (str.strip(dAlias)).lower() + ' '
                     ####################################################
-                    # print('')
+                    # print(dAlias)
             empresas_y_servicios += '$6$44$6$' + " "
                     
 
@@ -515,5 +513,5 @@ def cua(fechas_pal_xml_coma, numeroFechas):
 
 
 
-lectorXML(ruta)
+# lectorXML(ruta)
 # cua()
