@@ -258,7 +258,7 @@ fetch('http://localhost:5000/obtenerEntrada')
     
     document.getElementById("comentarios1").innerHTML = text2;
     // console.log('ObtenerEntrada Data:',data)
-    console.log('let')
+    console.log('let entrada cometarios1')
 
     // alert('Recargue la Pagina porfavor')
 });
@@ -289,6 +289,62 @@ function consultarData(){
 
     // alert('Recargue la Pagina porfavor')
 });
+
+
+}
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+// Obtener Fechas
+function unaFecha(fecha){
+  fetch('http://localhost:5000/buscarPorFecha/'+fecha,{
+  method:'POST'
+  })
+  .then(res => res.text())
+  .then(res => {
+    // alert('Regargue la fecha porfavor')
+    // actualizar()
+  })
+}
+
+
+function obtenerFechas(){
+  document.getElementById("cardsc").innerHTML = '';
+  let ftext="";
+  ftext = `<table class="table" style="margin=10px">
+<thead>
+<tr>
+<th scope="col">#</th>
+<th scope="col">Fecha</th>
+<th scope="col">Opciones</th>
+</tr>
+</thead>
+<tbody>`
+
+fetch('http://localhost:5000/obtenerFechas')
+  .then(response => response.json())
+  .then(data =>{
+      var i;
+  
+      console.log(data)
+      for(i=0;i<data.length;i++){
+        ftext+= `
+                  <tr>
+                  <th scope="row">${i+1}</th>
+                  <td id="${i+1}">${data[i]}</td>
+                  <td><button href="#" class="btn btn btn-danger" onclick="unaFecha('${data[i]}')">Seleccionar</button></td>
+                  </tr>
+                  `
+                  // console.log(data[i].nombree,'prueba')
+      }
+      ftext+=`</tbody>
+              </table>`
+      document.getElementById("cardsc").innerHTML = ftext;
+      console.log('Click en ObtenerFechas')
+  });
 
 
 }

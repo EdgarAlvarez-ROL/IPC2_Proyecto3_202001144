@@ -1,11 +1,6 @@
-from __future__ import print_function
-from ast import NameConstant
-from cgi import print_arguments
 from configparser import ParsingError
 from contextlib import ContextDecorator
-from distutils.archive_util import make_archive
 import math
-from posixpath import split
 from xml.dom import minidom
 import re
 import sys 
@@ -39,7 +34,7 @@ namesServicios = ''
 def lectorXML(rutanueva):
     global palabrasPositivas, palabrasNegativas, empresas_y_servicios, lista_de_mensajes, palabrasNeutras, listEmpresas, namesServicios
 
-    mydoc = minidom.parse(rutanueva)    
+    mydoc = minidom.parse(ruta)    
 
     """ SENTIMIENTOS """
     """"""        
@@ -55,7 +50,7 @@ def lectorXML(rutanueva):
             
             # print(palabra)
             palabrasPositivas += str.strip(palabra) + ' '            
-    listaPPositivas = (str.rstrip(palabrasPositivas)).split(' ')
+    listaPPositivas = ((str.rstrip(palabrasPositivas))).split(' ')
     palabrasPositivas = listaPPositivas
     # for x in palabrasPositivas:
     #     print(x)
@@ -97,11 +92,14 @@ def lectorXML(rutanueva):
             servicios = x.getElementsByTagName('servicio')
             for s in servicios:
                 nameServicio = str.strip(s.getAttribute('nombre'))
+               
+
                 # print(nameServicio)
                 nameServicio = re.sub(r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1", normalize( "NFD", nameServicio), 0, re.I)
                     # -> NFC
                 nameServicio = normalize( 'NFC', nameServicio)
                 
+
                 empresas_y_servicios += (nameServicio).lower() + ' '
                 namesServicios += ((nameServicio).lower()) + ','
                 # print(nameServicio)
@@ -119,7 +117,7 @@ def lectorXML(rutanueva):
                     ####################################################
                     palabrasNeutras += (str.strip(dAlias)).lower() + ' '
                     ####################################################
-                    print(dAlias)
+                    # print(dAlias)
             empresas_y_servicios += '$6$44$6$' + " "
                     
 
@@ -347,7 +345,7 @@ def neu_empre(empresa):
 """"""
 """ DEF SERVICIOS """
 def p_serv(empresa, services):
-    global lista_de_mensajes, listEmpresas, namesServicios, empresas_y_servicios
+    global lista_de_mensajes, listEmpresas, namesServicios, empresas_y_servicios, palabrasPositivas
 
     contador = 0
 
@@ -365,6 +363,47 @@ def p_serv(empresa, services):
 
         # print('')   
     return contador
+
+def n_serv(empresa, services):
+    global lista_de_mensajes, listEmpresas, namesServicios, empresas_y_servicios, palabrasNegativas
+
+    contador = 0
+
+    for x in range(len(palabrasNegativas)):
+        for mess in lista_de_mensajes:
+            n_palab = mess.count(palabrasNegativas[x])
+            for cuacua in empresas_y_servicios:
+                
+                # print(n_palab)
+                # print(empresa in mess)
+                if ((empresa in mess) == True) and n_palab >= 1 and ((cuacua in mess) == True):
+                    contador += 1
+                elif contador < 1 and cuacua == 1:
+                    contador = 0
+
+        # print('')   
+    return contador
+
+def neu_serv(empresa, services):
+    global lista_de_mensajes, listEmpresas, namesServicios, empresas_y_servicios, palabrasNeutras
+
+    contador = 0
+    contadorres = 0
+    for x in range(len(palabrasNeutras)):
+        for mess in lista_de_mensajes:
+            n_palab = mess.count(palabrasNeutras[x])
+            for cuacua in empresas_y_servicios:
+                
+                # print(n_palab)
+                # print(empresa in mess)
+                if ((empresa in mess) == True) and n_palab >= 1 and ((cuacua in mess) == True):
+                    contador += 1
+                elif contador < 1 and cuacua == 1:
+                    contador = 0
+        contadorres += 1
+        # print('')   
+    return contador - contadorres
+  
 
 def ns_serv(empresa, services):
     global lista_de_mensajes, listEmpresas, namesServicios, empresas_y_servicios
@@ -388,7 +427,7 @@ def ns_serv(empresa, services):
                 if ((empresa in mess) == True) and ((cuacua in mess) == True):
                     
                     contador += 1
-                    print(services + ' ' + empresa + ' ' +cuacua + ' '  + str(contador))
+                    # print(services + ' ' + empresa + ' ' +cuacua + ' '  + str(contador))
                     
                 elif cuacua == '$6$44$6$':
                     break
@@ -397,7 +436,7 @@ def ns_serv(empresa, services):
                 bandera = True
             
     # print(services)
-    print(empresas_y_servicios)   
+    # print(empresas_y_servicios)   
     return (contador-1)
 """"""
 
@@ -451,12 +490,17 @@ def cua(fechas_pal_xml_coma, numeroFechas):
             servicio = ET.SubElement(empresa, "servicio", {'nombre': serbicio})
             mensajes3 = ET.SubElement(servicio, "mensajes")
 
-            nnSErv = ns_serv(listEmpresas[contador], serbicio)
-            ET.SubElement(mensajes3, "total").text = str(nnSErv)
+            ttSErv = ns_serv(listEmpresas[contador], serbicio)
+            ET.SubElement(mensajes3, "total").text = str(ttSErv)
 
-            # nServ = p_serv(listEmpresas[contador], serbicio)
-            # ET.SubElement(mensajes3, "positivos").text = str(nServ)
+            pServ = p_serv(listEmpresas[contador], serbicio)
+            ET.SubElement(mensajes3, "positivos").text = str(pServ)
 
+            nServ = n_serv(listEmpresas[contador], serbicio)
+            ET.SubElement(mensajes3, "negativos").text = str(nServ)
+            
+            neuServ = neu_serv(listEmpresas[contador], serbicio)
+            ET.SubElement(mensajes3, "neutras").text = str(neuServ)
             
 
         
@@ -465,7 +509,7 @@ def cua(fechas_pal_xml_coma, numeroFechas):
 
 
     arbol = ET.ElementTree(lista_respuestas)
-    arbol.write("prueba.xml")
+    arbol.write("BackEnd0//request.xml")
 
 
 
