@@ -3,12 +3,15 @@ import os
 # import os
 import Procedimientos
 import analizadorXML
+import consultar_por_fecha
 
 
 class Gestor:
     def __init__(self):
         self.text = ''
         self.textSalida = ''
+        self.listEmpresas = ''
+        self.listFechas = ''
 
     #Create
     def recibirXML(self, data):
@@ -29,6 +32,16 @@ class Gestor:
         return json.dumps(self.textSalida)
 
 
+    def consultar_por_fecha(self,nFecha):
+        consultar_por_fecha.lectorXML('BackEnd0\\xmlCopyEntrada.xml',nFecha)
+
+        file = 'BackEnd0\\request.xml'
+
+        archivo = open(file, 'r') # abre el archivo datos.txt
+        self.textSalida = archivo.readlines()
+        # print(archivo.readline())
+        archivo.close()
+        return json.dumps(self.textSalida)
 
     # def crearUsuario(self,nombre,apellido,password,user):
     #     self.usuarios.append(Usuario(nombre,apellido,password,user))

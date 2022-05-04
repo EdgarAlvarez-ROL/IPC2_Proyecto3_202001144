@@ -4,6 +4,9 @@ from flask import Flask,  render_template, request, jsonify
 from flask_cors import CORS
 from Gestor import Gestor
 import xmltodict
+from retornadorListas import Retornador
+
+
 
 #Crear la app
 app = Flask(__name__)
@@ -12,7 +15,7 @@ app.config["DEBUG"] = True
 CORS(app)
 
 gestor =  Gestor()
-
+retorn =  Retornador()
 
 # EndPoints
 @app.route('/',methods=['GET'])
@@ -38,6 +41,21 @@ def obtener_enntrada():
 @app.route('/obtenerDataSalida')
 def Consultar_Data():
     return gestor.analizarXML()
+
+
+@app.route('/obtenerFechas')
+def retornar_las_fechas():
+    return retorn.retornarFechas()
+
+@app.route('/buscarPorFecha/<fecha>')
+def buscarporunafecha(fecha):
+    print(fecha)
+    return gestor.consultar_por_fecha(fecha)
+
+
+
+
+
 
 
 

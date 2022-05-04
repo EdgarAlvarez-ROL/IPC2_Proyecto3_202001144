@@ -8,18 +8,22 @@ import numpy as np
 
 from unicodedata import normalize
 
+from urllib3 import Retry
+
 """ A VER SI NO DA PROBLEMAS"""
 import xml.etree.cElementTree as ET
 """"""
+
+from retornadorListas import Retornador
 
 ruta = 'BackEnd0//xmlCopyEntrada.xml'
 
 
 mydoc = minidom.parse(ruta)            # Creamos un objeto del documento
 
-palabrasPositivas = ''
-palabrasNegativas = ''
-palabrasNeutras = ''
+palabrasPositivas = []
+palabrasNegativas = []
+palabrasNeutras = []
 empresas_y_servicios = ''
 lista_de_mensajes = ''
 listado_fechas = ''
@@ -49,9 +53,9 @@ def lectorXML(rutanueva):
             # print(palabra)
             
             # print(palabra)
-            palabrasPositivas += str.strip(palabra) + ' '            
-    listaPPositivas = ((str.rstrip(palabrasPositivas))).split(' ')
-    palabrasPositivas = listaPPositivas
+            palabrasPositivas.append(palabra)          
+    # listaPPositivas = ((str.rstrip(palabrasPositivas))).split(' ')
+    # palabrasPositivas = listaPPositivas
     # for x in palabrasPositivas:
     #     print(x)
     """"""
@@ -68,9 +72,9 @@ def lectorXML(rutanueva):
             # print(palabra)
 
             # print(palabra)
-            palabrasNegativas += str.strip(palabra) + ' '            
-    listaPNegativas = (str.rstrip(palabrasNegativas)).split(' ')
-    palabrasNegativas = listaPNegativas
+            palabrasNegativas.append(palabra)        
+    # listaPNegativas = (str.rstrip(palabrasNegativas)).split(' ')
+    # palabrasNegativas = listaPNegativas
     # for x in palabrasNegativas:
     #     print(x)
     """"""
@@ -115,7 +119,7 @@ def lectorXML(rutanueva):
                     # print(dAlias)
                     empresas_y_servicios += (dAlias).lower() + ' ' # + '1' + ' '
                     ####################################################
-                    palabrasNeutras += (str.strip(dAlias)).lower() + ' '
+                    palabrasNeutras.append((str.strip(dAlias)).lower())
                     ####################################################
                     # print(dAlias)
             empresas_y_servicios += '$6$44$6$' + " "
@@ -128,8 +132,8 @@ def lectorXML(rutanueva):
     tempEmpre = (str.rstrip(listEmpresas)).split(' ')
     listEmpresas = tempEmpre
 
-    listNeutras = (str.rstrip(palabrasNeutras)).split(' ')
-    palabrasNeutras = listNeutras
+    # listNeutras = (str.rstrip(palabrasNeutras)).split(' ')
+    # palabrasNeutras = listNeutras
     # print(palabrasNeutras)
 
     # print(namesServicios)
@@ -221,7 +225,7 @@ def analizar_fehcas_en_mensaje():
 
     numeroFechas = len(copy_listad_fechas)
     # analizar_sentimientos_en_mensajes()
-    cua(fechas_pal_xml_coma, numeroFechas)
+    cua(fechas_pal_xml_coma, numeroFechas, copy_listad_fechas)
     
 
 """ DEF FECHAS"""
@@ -442,8 +446,9 @@ def ns_serv(empresa, services):
 
 
 
-def cua(fechas_pal_xml_coma, numeroFechas):  
-    global listEmpresas, namesServicios
+def cua(fechas_pal_xml_coma, numeroFechas,   copy_listad_fechas):  
+    global listEmpresas, namesServicios, empresas_y_servicios,lista_de_mensajes, listado_fechas 
+
     lista_respuestas = ET.Element("lista_respuestas")
     respuesta = ET.SubElement(lista_respuestas, "respuesta")
 
@@ -510,8 +515,20 @@ def cua(fechas_pal_xml_coma, numeroFechas):
 
     arbol = ET.ElementTree(lista_respuestas)
     arbol.write("BackEnd0//request.xml")
+    
+    
+    ####################################################################################
+    """"""
+    retornadorF =  Retornador()
+    retornadorF.recibirFechas(copy_listad_fechas, listEmpresas)
+    
+    
+    empresas_y_servicios = ''
+    lista_de_mensajes = ''
+    listado_fechas = ''
 
+    listEmpresas = ''
+    namesServicios = ''
 
 
 # lectorXML(ruta)
-# cua()

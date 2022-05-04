@@ -1,5 +1,6 @@
   //Declaracion de Headers
 
+
 let headers = new Headers()
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
@@ -299,18 +300,27 @@ function consultarData(){
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Obtener Fechas
-function unaFecha(fecha){
-  fetch('http://localhost:5000/buscarPorFecha/'+fecha,{
-  method:'POST'
-  })
-  .then(res => res.text())
-  .then(res => {
-    // alert('Regargue la fecha porfavor')
-    // actualizar()
-  })
+function unaFecha(nFecha){
+  // document.getElementById("comentarios1").innerHTML = '';
+  let textSalida="";
+  textSalida = ``
+
+  fetch('http://localhost:5000/buscarPorFecha/'+nFecha)
+  .then(response => response.json())
+  .then(data =>{
+    var i;
+    textSalida+= `${data}`
+    document.getElementById("comentarios2").innerHTML = textSalida;
+    console.log('actualizando SALIDA unaFecha')
+    // console.log('ObtenerEntrada Data:',data)
+
+    // alert('Recargue la Pagina porfavor')
+});
 }
 
 
+
+// import * as moment from 'moment';
 function obtenerFechas(){
   document.getElementById("cardsc").innerHTML = '';
   let ftext="";
@@ -334,17 +344,45 @@ fetch('http://localhost:5000/obtenerFechas')
         ftext+= `
                   <tr>
                   <th scope="row">${i+1}</th>
-                  <td id="${i+1}">${data[i]}</td>
-                  <td><button href="#" class="btn btn btn-danger" onclick="unaFecha('${data[i]}')">Seleccionar</button></td>
+                  <td>${data[i]}</td>
+                  <td><button href="#" class="btn btn btn-danger" onclick="unaFecha('${i}')">Buscar</button></td>
                   </tr>
                   `
-                  // console.log(data[i].nombree,'prueba')
       }
-      ftext+=`</tbody>
+      ftext+=`
+              </tbody>
               </table>`
+
+
       document.getElementById("cardsc").innerHTML = ftext;
       console.log('Click en ObtenerFechas')
   });
 
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Obtener por varias fechas
+function agregarPaciente(){
+  let fechaA = document.getElementById("fechaA");
+  let fechaB = document.getElementById("fechaB");
+    fetch('http://localhost:5000/variasFechas', {
+    method: 'POST',
+    headers,
+    body: `{
+        "fechaA":"${fechaA.value}",
+        "fechaB":"${fechaB.value}"
+      }`,
+  })
+  .then(response => response.json())
+  .then(result => {
+    console.log('Success:', result);
+    // actualizar()
+    // empresa.value=''
+    
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
 
 }

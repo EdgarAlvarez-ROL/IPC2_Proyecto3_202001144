@@ -1,31 +1,23 @@
-import os
-from flask import Flask, render_template, request
-from werkzeug import secure_filename 
+from configparser import ParsingError
+from contextlib import ContextDecorator
+import math
+from xml.dom import minidom
+import re
+import sys 
+import numpy as np 
 
-# instancia del objeto Flask
-app = Flask(__name__)
-# Carpeta de subida
-app.config['UPLOAD_FOLDER'] = './Archivos XML'
 
-@app.route("/")
-def upload_file():
- # renderiamos la plantilla "formulario.html"
- return render_template('formulario.html')
-
-@app.route("/upload", methods=['POST'])
-def uploader():
- if request.method == 'POST':
-  # obtenemos el archivo del input "archivo"
-  f = request.files['archivo']
-  filename = secure_filename(f.filename)
-  # Guardamos el archivo en el directorio "Archivos PDF"
-  f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-  # Retornamos una respuesta satisfactoria
-  return "<h1>Archivo subido exitosamente</h1>"
+def retornarFechas():
+  print('retornador Fechas')
+  ruta = 'BackEnd0//database.xml'
+  mydoc = minidom.parse(ruta) 
+  datos = mydoc.getElementsByTagName('datos')      
+  for x in datos:
+    for fechas in x.getElementsByTagName('fecha'):
+      lafecha = (fechas.childNodes[0].data).lower()
+      print(lafecha)
+      # self.lista_de_Fechas.append(x)
 
 
 
-#INICIAR EL SERVIDOR
-if __name__ == "__main__":
-    # app.run(host="0.0.0.0",debug=True)
-     app.run(debug=True)
+retornarFechas()
