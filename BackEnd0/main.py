@@ -55,7 +55,11 @@ def buscarporunafecha(fecha):
 
 
 
-
+@app.route('/variasFechas',methods=['POST'])
+def buscarRangoFechas():
+    dato = request.json
+    gestor.rangofechas(dato['fechaA'],dato['fechaB'])
+    return '{"Estado":"Buscando Fechas"}'
 
 
 

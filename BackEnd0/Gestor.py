@@ -32,6 +32,7 @@ class Gestor:
         return json.dumps(self.textSalida)
 
 
+
     def consultar_por_fecha(self,nFecha):
         consultar_por_fecha.lectorXML('BackEnd0\\xmlCopyEntrada.xml',nFecha)
 
@@ -43,6 +44,10 @@ class Gestor:
         archivo.close()
         return json.dumps(self.textSalida)
 
+
+
+    def rangofechas(self,fechaA,fechaB):
+        print()
     # def crearUsuario(self,nombre,apellido,password,user):
     #     self.usuarios.append(Usuario(nombre,apellido,password,user))
 

@@ -386,3 +386,11 @@ function agregarPaciente(){
   });
 
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// RESET
+function reset(){
+  document.getElementById("comentarios1").innerHTML = '';
+  document.getElementById("comentarios2").innerHTML = '';
+}
