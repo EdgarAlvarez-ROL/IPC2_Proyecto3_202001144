@@ -394,3 +394,9 @@ function reset(){
   document.getElementById("comentarios1").innerHTML = '';
   document.getElementById("comentarios2").innerHTML = '';
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PDF
+function hacerPDF(){
+  fetch('http://localhost:5000/hacerPDF')
+}

@@ -61,6 +61,14 @@ def buscarRangoFechas():
     gestor.rangofechas(dato['fechaA'],dato['fechaB'])
     return '{"Estado":"Buscando Fechas"}'
 
+@app.route('/hacerPDF')
+def hacerpdf_si():
+    gestor.hacerPDF()
+    return '{"Estado":"PDF"}'
+
+
+
+
 
 
 

@@ -448,6 +448,9 @@ def ns_serv(empresa, services):
 
 def cua(fechas_pal_xml_coma, numeroFechas,   copy_listad_fechas):  
     global listEmpresas, namesServicios, empresas_y_servicios,lista_de_mensajes, listado_fechas 
+    file = 'Backend0//textPDF.txt'
+    archivo = open(file, 'w') 
+    
 
     lista_respuestas = ET.Element("lista_respuestas")
     respuesta = ET.SubElement(lista_respuestas, "respuesta")
@@ -467,6 +470,8 @@ def cua(fechas_pal_xml_coma, numeroFechas,   copy_listad_fechas):
 
         nneu = neu_fech(fechas_pal_xml_coma[contador])
         ET.SubElement(mensajes, "neutros").text = str(nneu)
+
+        archivo.write('\nfecha\n'+fechas_pal_xml_coma[contador]+ '\nTotal:' + fechas_pal_xml_coma[contMes]+ '\nPositivos:' + str(np)+ '\nNegativos:' + str(nn)+ '\nNeutros:' + str(nneu) +'\n')
         contador += 2
         contMes += 2
     
@@ -490,6 +495,9 @@ def cua(fechas_pal_xml_coma, numeroFechas,   copy_listad_fechas):
 
         nneu = neu_empre(listEmpresas[contador])
         ET.SubElement(mensajes2, "neutros").text = str(nneu)
+        
+        archivo.write('\nEmpresa\n'+listEmpresas[contador]+ '\nTotal:' + str(nMensaje) + '\nPositivos:' + str(np)+ '\nNegativos:' + str(nn)+ '\nNeutros:' + str(nneu) +'\n')
+
 
         for serbicio in namesServicios:
             servicio = ET.SubElement(empresa, "servicio", {'nombre': serbicio})
@@ -505,14 +513,16 @@ def cua(fechas_pal_xml_coma, numeroFechas,   copy_listad_fechas):
             ET.SubElement(mensajes3, "negativos").text = str(nServ)
             
             neuServ = neu_serv(listEmpresas[contador], serbicio)
-            ET.SubElement(mensajes3, "neutras").text = str(neuServ)
-            
+            ET.SubElement(mensajes3, "neutros").text = str(neuServ)
+
+            archivo.write('\nServicio\n'+serbicio+ '\nTotal:' + str(ttSErv) + '\nPositivos:' + str(pServ)+ '\nNegativos:' + str(nServ)+ '\nNeutros:' + str(neuServ) +'\n')
+
 
         
         contador += 1
 
 
-
+    archivo.close()
     arbol = ET.ElementTree(lista_respuestas)
     arbol.write("BackEnd0//request.xml")
     

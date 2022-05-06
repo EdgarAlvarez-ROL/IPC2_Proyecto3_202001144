@@ -4,7 +4,7 @@ import os
 import Procedimientos
 import analizadorXML
 import consultar_por_fecha
-
+import generadrPDF
 
 class Gestor:
     def __init__(self):
@@ -50,6 +50,8 @@ class Gestor:
         print()
     # def crearUsuario(self,nombre,apellido,password,user):
     #     self.usuarios.append(Usuario(nombre,apellido,password,user))
+    def hacerPDF(self):
+        generadrPDF.recibirText()
 
 
     #Read

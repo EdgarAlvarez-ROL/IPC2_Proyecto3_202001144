@@ -129,7 +129,7 @@ def p_fech(fecha):
             if fechaita == fecha and n_palab >= 1:
                 contador += 1
         # print('')   
-    palabrasPositivas = ''
+    
     return contador
 
 def n_fech(fecha):
@@ -146,7 +146,7 @@ def n_fech(fecha):
             if fechaita == fecha and n_palab == 1:
                 contador += 1
         # print('')   
-    palabrasNegativas = ''
+    
     return contador
 
 def neu_fech(fecha):
@@ -163,7 +163,7 @@ def neu_fech(fecha):
             if fechaita == fecha and n_palab == 1:
                 contador += 1
         # print('')   
-    palabrasNeutras = ''
+    
     return contador
 
 def mensaje_con_fecha(fecha):
@@ -177,14 +177,19 @@ def mensaje_con_fecha(fecha):
         if fechaita == fecha:
             contador += 1
     # print('')   
-    lista_de_mensajes = ''
+    
     return contador
 """"""
 
 
 
 def cua(arrayFechas, buscarEstaFecha):  
-    global listEmpresas, namesServicios
+    global listEmpresas, namesServicios, lista_de_mensajes, palabrasNeutras,palabrasNegativas,palabrasPositivas
+
+
+    file = 'Backend0//textPDF.txt'
+    archivo = open(file, 'w') 
+
     lista_respuestas = ET.Element("lista_respuestas")
     respuesta = ET.SubElement(lista_respuestas, "respuesta")
 
@@ -207,6 +212,9 @@ def cua(arrayFechas, buscarEstaFecha):
 
             nneu = neu_fech(x)
             ET.SubElement(mensajes, "neutros").text = str(nneu)
+
+            archivo.write('\nfecha\n'+x+ '\nTotal:' + str(nMess)+ '\nPositivos:' + str(np)+ '\nNegativos:' + str(nn)+ '\nNeutros:' + str(nneu) +'\n')
+
         contador += 1
         contMes += 2
     
@@ -214,10 +222,13 @@ def cua(arrayFechas, buscarEstaFecha):
     contMes = 1
 
 
-
+    archivo.close()
     arbol = ET.ElementTree(lista_respuestas)
     arbol.write("BackEnd0//request.xml")
-
+    lista_de_mensajes = ''
+    palabrasNeutras = ''
+    palabrasNegativas = ''
+    palabrasPositivas = ''
 
 
 # lectorXML(ruta,0)
